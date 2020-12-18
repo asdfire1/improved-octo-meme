@@ -4,9 +4,10 @@ Programs and description for the simulation for ROB5 project - Automatic Laser T
 
 Program versions used:
 
-RoboDK :
+RoboDK : 5.2
 
-TwinCAT: 
+TExxxx | TC3 Engineering
+3.1.4024.11
 
-UaExpert:
+Unified Automation UaExpert v 1.5.1
 
