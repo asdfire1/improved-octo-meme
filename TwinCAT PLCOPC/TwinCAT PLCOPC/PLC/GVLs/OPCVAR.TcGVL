@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.5">
+  <GVL Name="OPCVAR" Id="{fd6c5c14-43a4-46a0-952e-b1336be2922b}">
+    <Declaration><![CDATA[{attribute 'qualified_only'}
+VAR_GLOBAL
+	{attribute 'OPC.UA.DA' := '1'}
+	StationParameter: STRING;
+	{attribute 'OPC.UA.DA' := '1'}
+	StationValue: STRING;
+	inPos1: INT;
+	inPos2: INT;
+	pistLock: INT;
+END_VAR
+]]></Declaration>
+  </GVL>
+</TcPlcObject>
