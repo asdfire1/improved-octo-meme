@@ -32,10 +32,9 @@ In a GVLs a global variables list is created, named OPCVAR, with variables decla
 	{attribute 'qualified_only'}
 	VAR_GLOBAL
 		{attribute 'OPC.UA.DA' := '1'}
-		StationParameter: STRING;
-		{attribute 'OPC.UA.DA' := '1'}
-		StationValue: STRING;
 		inPos1: INT;
+		{attribute 'OPC.UA.DA' := '1'}
 		inPos2: INT;
+		{attribute 'OPC.UA.DA' := '1'}
 		pistLock: INT;	
 	END_VAR
