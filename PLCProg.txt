@@ -1,0 +1,87 @@
+IF Count = 5 THEN
+	state := 10;
+ELSIF Count = 10 THEN
+	STOP.STOP := TRUE;
+	state :=0;
+ELSIF OPCVAR.inPos1 = 1 AND OPCVAR.inPos2 = 0 AND Count <> 10 THEN
+	state := 1;
+ELSIF OPCVAR.inPos1 = 0 AND OPCVAR.inPos2 = 1 AND Count <> 10 THEN
+	state := 2;
+ELSE 
+	state :=0;
+END_IF
+
+CASE state OF
+1:  
+    lockValve := TRUE;
+	unlockValve := FALSE;
+	IF inSensor = TRUE THEN
+		OPCVAR.pistLock := 1;
+		IF toolNr <> TRUE THEN
+			state := 0;
+		END_IF
+	ELSIF inSensor = FALSE THEN
+		Delay(IN := TRUE, PT:= T#1S);
+   		IF NOT (Delay.Q) THEN
+			RETURN;
+		END_IF;
+		Count := Count +1;
+		ADSLOGSTR( msgCtrlMask := ADSLOG_MSGTYPE_WARN,
+        msgFmtStr := 'PISTONFAILURE: %s', 
+		strArg := LREAL_TO_STRING(Count));
+		Delay(IN := FALSE);
+		OPCVAR.pistLock := 0;
+	END_IF
+2:  
+    lockValve := FALSE;
+	unlockValve := TRUE;
+	IF inSensor = FALSE THEN
+		OPCVAR.pistLock := 0;
+	ELSIF inSensor = TRUE THEN
+		Delay1(IN := TRUE, PT:= T#1S);
+   		IF NOT (Delay1.Q) THEN
+	       	RETURN;
+	   	END_IF;
+		Count := Count +1;
+		ADSLOGSTR( msgCtrlMask := ADSLOG_MSGTYPE_WARN,
+        msgFmtStr := 'PISTONFAILURE: %s', 
+		strArg := LREAL_TO_STRING(Count));
+		OPCVAR.pistLock := 1;
+		Delay1(IN := FALSE);
+	END_IF
+10:
+	ADSLOGSTR( msgCtrlMask := ADSLOG_MSGTYPE_ERROR OR ADSLOG_MSGTYPE_MSGBOX,
+        msgFmtStr := 'PISTON is not engaged after %s trials', strArg := LREAL_TO_STRING(Count));
+	Count :=10;
+	RETURN;
+0:
+    IF inSensor = FALSE AND OPCVAR.pistLock = 1 THEN
+		IF preSensor <> inSensor THEN
+			lockValve := FALSE;
+			unlockValve := FALSE;
+		ELSE
+			lockValve := lockValve;
+			unLockValve := unLockValve;
+		END_IF
+	ELSIF inSensor = TRUE AND OPCVAR.pistLock = 0 THEN
+		IF preSensor <> inSensor THEN
+			lockValve := FALSE;
+			unlockValve := FALSE;
+		ELSE
+			lockValve := lockValve;
+			unLockValve := unLockValve;
+		END_IF
+	ELSIF inSensor = FALSE AND OPCVAR.pistLock = 0 THEN
+		lockValve := FALSE;
+		unlockValve := TRUE;
+		preSensor := inSensor;
+		Count := 0;
+	ELSIF inSensor = TRUE AND OPCVAR.pistLock = 1 THEN
+		lockValve := TRUE;
+		unlockValve := FALSE;
+		preSensor := inSensor;
+		Count := 0;
+	END_IF
+ELSE
+	RETURN;
+END_CASE;
