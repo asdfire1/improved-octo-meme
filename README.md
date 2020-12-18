@@ -13,8 +13,11 @@ Unified Automation UaExpert v 1.5.1
 
 # TwinCat setup
 The variables in MAIN should be declared as:
+
 PROGRAM MAIN
+
 VAR
+
 	Count: INT;
 	state: INT;
 	STOP: PLC_Stop;
@@ -24,11 +27,15 @@ VAR
 	Delay: TON;
 	Delay1: TON;
 	preSensor: BOOL;
+	
 END_VAR
 
 In a GVLs a global variables list is created, named OPCVAR, with variables declared as:
+
 {attribute 'qualified_only'}
+
 VAR_GLOBAL
+
 	{attribute 'OPC.UA.DA' := '1'}
 	StationParameter: STRING;
 	{attribute 'OPC.UA.DA' := '1'}
@@ -36,4 +43,5 @@ VAR_GLOBAL
 	inPos1: INT;
 	inPos2: INT;
 	pistLock: INT;
+	
 END_VAR
